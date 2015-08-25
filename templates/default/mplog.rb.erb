@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+#
+# This is mplog.rb, a server that is to be loggind 
+# mysql processlist by daemons.
+#
+
+require 'rubygems'
+require 'daemons'
+require 'mysql'
+require 'json'
+
+#
+# see: http://www.rubydoc.info/gems/daemons/Daemons
+#
+options = {
+# :ontop => true,
+  :app_name   => "mplog",
+  :backtrace  => true,
+  :monitor    => true,
+  :dir_mode   => :system,
+  :log_output => true,
+  :log_dir    => "<%= node[:mplog][:log_dir] %>"
+}
+
+Daemons.run_proc "mplog", options do
+  my = Mysql.new ENV["MPLOG_HOST"], ENV["MPLOG_USER"], ENV["MPLOG_PASS"], ENV["MPLOG_DB"]
+  loop do
+    now  = Time.now.strftime "%Y-%m-%d %H:%M:%S"
+    obj  = Hash.new
+    rows = my.query "show full processlist;"
+    rows.each do |row|
+      # reprace CR and LF
+      info = row[7].to_s.gsub(/(\r\n|\r|\n)/, " ")
+      obj = {
+        :date => now, :id => row[0], :user => row[1], :host => row[2], :db => row[3],
+        :command => row[4], :duration => row[5], :state => row[6], :info => info
+      }
+      puts obj.to_json
+    end
+    sleep <%= node[:mplog][:period] %>
+  end
+  my.close
+end

@@ -1,0 +1,48 @@
+####
+## tail
+##
+<source>
+  type tail
+  path <%= node['mplog']['log_dir'] %>/mplog.output
+  pos_file /var/log/td-agent/mplog.pos
+  format json
+  tag mplog
+</source>
+
+####
+## forward
+##
+<match mplog>
+  type forest
+  subtype copy
+
+  <template>
+    <store>
+      type s3
+      aws_key_id <%= node['mplog']['aws']['access_key'] %>
+      aws_sec_key <%= node['mplog']['aws']['secret_key'] %>
+      s3_bucket <%= node['mplog']['aws']['s3_bucket'] %>
+
+      s3_endpoint s3-ap-northeast-1.amazonaws.com
+      buffer_path /var/log/td-agent/buffer/${tag}
+      buffer_chunk_limit 1024m
+      buffer_queue_limit 512
+      flush_interval 10s
+      retry_wait 30s
+
+      path ${tag}/%Y/%m/%d/%H/
+      time_slice_format %Y%m%dT%H.%M
+      s3_object_key_format %{path}mplog-%{hostname}-%{time_slice}-%{index}.json
+      time_slice_wait 0m
+
+      store_as json
+      localtime
+      format_json true
+    </store>
+
+    <store>
+      type loggly
+      loggly_url https://logs-01.loggly.com/inputs/<%= node['mplog']['loggly']['token'] %>/tag/mplog
+    </store>
+  </template>
+</match>

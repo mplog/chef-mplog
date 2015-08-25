@@ -1,0 +1,13 @@
+<%= node[:mplog][:log_dir] %>/* {
+    daily
+    missingok
+    rotate <%= node[:mplog][:rotate] %>
+    compress
+    dateext
+    dateformat <%= node[:mplog][:dateformat] %>
+    notifempty
+    delaycompress
+    copytruncate
+    sharedscripts
+    create 0644 root root
+}
