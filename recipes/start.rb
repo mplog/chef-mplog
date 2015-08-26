@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: mplog
+# Cookbook Name:: chef-mplog
 # Recipe:: start
 #
 

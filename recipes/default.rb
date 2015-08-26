@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: mplog
+# Cookbook Name:: chef-mplog
 # Recipe:: default
 #
 
@@ -68,4 +68,4 @@ if node[:mplog][:td_agent][:use]
   end
 end
 
-include_recipe "mplog::restart"
+include_recipe "chef-mplog::restart"
