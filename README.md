@@ -7,6 +7,12 @@ Use Case
 ---------------
 ![mplog usecase](http://36.media.tumblr.com/ecac2ab4dcb98f7122e3be589c0d180d/tumblr_nsulhcm3UO1sgbl7do1_1280.png)
 
+1. Execute this recipe from OpsWorks to EC2.
+2. Every 1 minute, Result of "show full processlist" will be outputted in JSON format.
+3. Outputted log is sent to S3 and Loggly using fluentd.
+4. Sent logs in S3 is notified by an event to Lambda.
+5. Case beyond threshold, Lambda will notification to Slack.
+
 Attributes of Cookbook
 ---------------
 * `[:mplog][:log_dir]` - default /var/log/mplog
