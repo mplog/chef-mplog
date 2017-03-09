@@ -5,7 +5,7 @@ chef-mplog
 
 Use Case
 ---------------
-![mplog usecase](http://36.media.tumblr.com/ecac2ab4dcb98f7122e3be589c0d180d/tumblr_nsulhcm3UO1sgbl7do1_1280.png)
+![mplog usecase](http://68.media.tumblr.com/ecac2ab4dcb98f7122e3be589c0d180d/tumblr_inline_ntmreaQFob1s8qrai_500.png)
 
 1. Execute this recipe from OpsWorks to EC2.
 2. Every 1 minute, Result of "show full processlist" will be outputted in JSON format.
@@ -32,7 +32,7 @@ Attributes of Cookbook
 
 Custom JSON example
 ---------------
-```
+```json
 { 
   "opsworks": {
     "data_bags": {
